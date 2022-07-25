@@ -1,39 +1,3 @@
-import org.junit.Test
-import kotlin.test.*
-
-class LabTest {
-    @Test
-    fun `Given a list, whem it has multiple elements, then result list should be correct`() {
-        val result = processList(
-            listOf(10, "Enero", null, true)
-        )
-        assertNotNull(result)
-        assertTrue(result.size == 3)
-        assertTrue(
-            result.get(0).originalPos == 0
-                    && result.get(0).originalValue == 10
-                    && result.get(0).type?.lowercase() == "entero"
-                    && result.get(0).info?.lowercase() == "m10"
-        )
-
-        assertTrue(
-            result.get(1).originalPos == 1
-                    && result.get(1).originalValue == "Enero"
-                    && result.get(1).type?.lowercase() == "cadena"
-                    && result.get(1).info?.lowercase() == "l5"
-        )
-        assertTrue(
-            result.get(2).originalPos == 3
-                    && result.get(2).originalValue == true
-                    && result.get(2).type?.lowercase() == "booleano"
-                    && result.get(2).info?.lowercase() == "verdadero"
-        )
-    }
-}
-
-
-
-
 // No tocar esta clase ---
 data class ItemData(
     var originalPos: Int,
@@ -48,42 +12,26 @@ fun main() {
     println(result)
 }
 
-
 fun processList(inputList: List<Any?>?): List<ItemData>? {
-    //var mylist: ArrayList<Int> = ArrayList()
-    var data  : ArrayList<ItemData> = ArrayList()
-    var index : Int = 0
-
+    var array : ArrayList<ItemData> = ArrayList<ItemData>()
     if (inputList == null) return null
 
-    for (item: Any? in inputList){
-
-        when (item) {
-            is Int -> {
-                val itemData : ItemData = isInt(item, index)
-                data.add(itemData)
+    var index : Int = 0
+    inputList.forEach{
+        if (it != null){
+            when(it){
+                is String -> {array.add(ItemData(index,it,"cadena", "L" + it.length))}
+                is Boolean -> {array.add(ItemData(index,it,"booleano", if (it) "verdadero" else "falso"))}
+                is Int -> {array.add(ItemData(index,it,"entero", isInt(it)))}
             }
-
-            is String -> {
-                val itemData : ItemData = isString(item, index)
-                data.add(itemData)
-            }
-
-            is Boolean -> {
-                val itemData : ItemData = isBoolean(item, index)
-                data.add(itemData)
-            }
-
-            else -> {}
         }
         index += 1
-
     }
-    return data
+
+    return array
 }
 
-
-fun isInt(item : Int, index: Int ) : ItemData {
+fun isInt(item : Int) : String? {
     var info : String? = ""
 
     when{
@@ -100,24 +48,29 @@ fun isInt(item : Int, index: Int ) : ItemData {
             info = null
         }
     }
-
-    val itemData : ItemData = ItemData(index, item, "entero", info)
-    return itemData
+    return info
 }
+/**
+ * Cómo verificar el tipo de objeto?
+ * when (myAnyTypeElement) {
+ * 	is String -> TODO()
+ *  is Int -> TODO()
+ *  is Boolean -> TODO()
+ * 	else -> TODO()
+ * }
+ */
 
+/**
+ * Cómo declarar una función en una variable?
+ * val myFuncVar = { x: Any -> TODO() }
+ */
 
-fun isString(item: String, index: Int) : ItemData{
-    var info : String = "L" + item.length
-
-    val itemData : ItemData = ItemData(index, item, "cadena", info)
-    return itemData
-}
-
-fun isBoolean(item: Boolean, index: Int): ItemData{
-    var info : String = "falso"
-
-    if (item) {info = "verdadero"}
-
-    val itemData : ItemData = ItemData(index, item, "booleano", info)
-    return itemData
-}
+/**
+ * Cómo crear un objeto de nuestra clase?
+ * val newItem = ItemData(
+ * 	originalPos = 0,
+ * 	originalValue = "hola"
+ * 	type = "cadena"
+ * 	info = "L4"
+ * )
+ */
